@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>SpeedReed Demo</title>
+    <link rel="stylesheet" href="css/speedreed-full.css">
+</head>
+<body>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="pie-loader"></div>
+    </div>
+
+    <div class="container">
+        <!-- Hamburger Menu Button -->
+        <button id="menuBtn" class="hamburger-btn">☰</button>
+
+        <!-- Main Screen Load Buttons -->
+        <div class="main-load-buttons">
+            <button id="quickDemoBtn" class="main-load-btn">Start Quick Demo</button>
+            <button id="mainLoadTextBtn" class="main-load-btn">Load Text File</button>
+            <button id="mainLoadDocBtn" class="main-load-btn main-load-btn-pro">Load PDF/EPUB</button>
+        </div>
+
+        <!-- Text visualization area -->
+        <div class="text-display" id="textDisplay">
+            <div id="leftBox" class="text-box left"></div>
+            <div id="middleBox" class="text-box middle"></div>
+            <div id="rightBox" class="text-box right"></div>
+            <!-- Reload icon for end of text -->
+            <button id="reloadIcon" class="reload-icon" style="display: none;">
+                <svg width="32" height="32" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 4v6h-6M1 20v-6h6"/>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Progress bar (optional) -->
+        <div class="progress-container" id="progressContainer">
+            <div id="progressBar" class="progress-bar">
+                <div id="progressBarFill" class="progress-bar-fill">
+                    <div id="progressBarThumb" class="progress-bar-thumb"></div>
+                </div>
+            </div>
+            <span id="progressText">0%</span>
+        </div>
+
+        <!-- Hamburger Menu Overlay -->
+        <div id="menuOverlay" class="menu-overlay">
+            <div class="menu-content">
+                <button id="closeMenuBtn" class="close-btn">×</button>
+
+                <!-- Pro Upgrade Banner (hidden if Pro) -->
+                <div id="proUpgradeBanner" class="pro-banner-menu">
+                    Unlock all features with Pro!
+                </div>
+
+                <div class="menu-section">
+                    <h3>Controls</h3>
+                    <button id="browseBtn" class="menu-btn">Load Text</button>
+                    <button id="browseDocBtn" class="menu-btn pro-feature">Load PDF/EPUB <span class="lock-icon">🔒</span></button>
+                    <button id="startBtn" class="menu-btn">Start</button>
+                    <button id="restartBtn" class="menu-btn">Restart</button>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Speed (WPM)</h3>
+                    <div class="wpm-display">
+                        <span id="currentWpm">250</span> WPM
+                    </div>
+                    <div class="wpm-controls">
+                        <button class="wpm-btn" data-wpm="100">100</button>
+                        <button class="wpm-btn" data-wpm="150">150</button>
+                        <button class="wpm-btn" data-wpm="200">200</button>
+                        <button class="wpm-btn active" data-wpm="250">250</button>
+                        <button class="wpm-btn" data-wpm="300">300</button>
+                        <button class="wpm-btn" data-wpm="400">400</button>
+                        <button class="wpm-btn pro-feature" data-wpm="500">
+                            500 <span class="lock-icon">🔒</span>
+                        </button>
+                        <button class="wpm-btn pro-feature" data-wpm="600">
+                            600 <span class="lock-icon">🔒</span>
+                        </button>
+                    </div>
+                    <div class="wpm-fine-controls pro-feature-section">
+                        <button id="wpmDown" class="wpm-adjust">-10</button>
+                        <button id="wpmUp" class="wpm-adjust">+10</button>
+                        <span class="lock-icon">🔒</span>
+                    </div>
+                </div>
+
+                <div class="menu-section pro-feature-section">
+                    <h3>Sleep Timer <span class="lock-icon">🔒</span></h3>
+                    <div class="timer-display">
+                        <span id="timerDisplay">Off</span>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="timer-btn" data-minutes="30">30min</button>
+                        <button class="timer-btn" data-minutes="60">1hr</button>
+                        <button class="timer-btn" data-minutes="120">2hr</button>
+                        <button class="timer-btn" data-minutes="180">3hr</button>
+                        <button id="timerOff" class="timer-btn active">Off</button>
+                    </div>
+                </div>
+
+                <div class="menu-section pro-feature-section">
+                    <h3>Screen Orientation <span class="lock-icon">🔒</span></h3>
+                    <div class="orientation-controls">
+                        <button id="orientationPortrait" class="orientation-btn active">Portrait</button>
+                        <button id="orientationLandscape" class="orientation-btn pro-feature">Landscape <span class="lock-icon">🔒</span></button>
+                        <button id="orientationAuto" class="orientation-btn pro-feature">Auto <span class="lock-icon">🔒</span></button>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Display Settings</h3>
+                    <div class="slider-control">
+                        <label>Main Text Opacity</label>
+                        <input type="range" id="mainTextOpacity" min="0" max="100" value="100" class="opacity-slider">
+                        <span id="mainTextOpacityValue">100%</span>
+                    </div>
+                    <div class="slider-control">
+                        <label>Side Text Opacity</label>
+                        <input type="range" id="sideTextOpacity" min="0" max="100" value="50" class="opacity-slider">
+                        <span id="sideTextOpacityValue">50%</span>
+                    </div>
+                    <div class="slider-control">
+                        <label>Background Opacity</label>
+                        <input type="range" id="backgroundOpacity" min="0" max="100" value="100" class="opacity-slider">
+                        <span id="backgroundOpacityValue">100%</span>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Reading Guide</h3>
+                    <label class="menu-toggle">
+                        <input type="checkbox" id="yellowGuideToggle">
+                        <span>Dynamic Guide</span>
+                    </label>
+                    <label class="menu-toggle">
+                        <input type="checkbox" id="sentencePauseToggle" checked>
+                        <span>Sentence Pause</span>
+                    </label>
+                </div>
+
+                <div class="menu-section pro-feature-section">
+                    <h3>Options <span class="lock-icon">🔒</span></h3>
+                    <label class="menu-toggle">
+                        <input type="checkbox" id="loopCheckbox">
+                        <span>Loop Text</span>
+                    </label>
+                    <label class="menu-toggle">
+                        <input type="checkbox" id="progressToggle" checked>
+                        <span>Show Progress</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upgrade Modal -->
+        <div id="upgradeModal" class="upgrade-modal">
+            <div class="upgrade-modal-content">
+                <button id="closeUpgradeModal" class="close-btn">×</button>
+                <h2>Upgrade to Pro</h2>
+                <p class="upgrade-price">$1.99 one-time purchase</p>
+
+                <div class="upgrade-features">
+                    <h3>Unlock Premium Features:</h3>
+                    <ul>
+                        <li>✓ PDF & EPUB support</li>
+                        <li>✓ High-speed reading (500-600 WPM)</li>
+                        <li>✓ Fine WPM adjustments (+/- 10)</li>
+                        <li>✓ Sleep timer</li>
+                        <li>✓ Screen orientation lock</li>
+                        <li>✓ Advanced options (Loop text)</li>
+                    </ul>
+                </div>
+
+                <button id="purchaseProBtn" class="purchase-btn">Purchase Pro - $1.99</button>
+                <button id="restorePurchaseBtn" class="restore-btn">Restore Purchase</button>
+            </div>
+        </div>
+
+        <!-- File inputs (hidden) -->
+        <input type="file" id="fileInput" accept=".txt,.text,text/*,*/*" style="display: none;">
+        <input type="file" id="docInput" accept=".pdf,.epub,application/pdf,application/epub+zip" style="display: none;">
+    </div>
+
+    <!-- Ad Banner Placeholder -->
+    <div id="adBanner" class="ad-banner">
+        <div class="ad-placeholder">Advertisement</div>
+    </div>
+
+    <!-- Mock Purchase Manager for Demo (All Pro Features Unlocked) -->
+    <script>
+        window.PurchaseManager = {
+            PRODUCT_ID: 'speedreader_pro',
+            STORAGE_KEY: 'speedreader_pro_status',
+            isInitialized: true,
+
+            init: function() {
+                console.log('Demo PurchaseManager initialized - All features unlocked');
+            },
+
+            isPro: function() {
+                return true; // Always Pro for demo
+            },
+
+            purchasePro: function() { },
+
+            restorePurchases: function() { },
+
+            notifyProStatusChange: function() {
+                document.dispatchEvent(new CustomEvent('proStatusChanged', {
+                    detail: { isPro: true }
+                }));
+            },
+
+            savePurchaseStatus: function(isPro) { }
+        };
+    </script>
+
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+    </script>
+    <!-- JSZip for EPUB -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="js/speedreed-full.js"></script>
+    <script>
+        // Demo text for Quick Demo button
+        const DEMO_TEXT = `Rapid Serial Visual Presentation, or RSVP, is a powerful speed reading technique that displays text one word at a time in rapid succession. This method eliminates the need for eye movements across a page, allowing your brain to focus solely on processing information. Studies have shown that RSVP can significantly increase reading speed without compromising comprehension. Traditional reading involves your eyes making small jumping movements called saccades, which can slow down your reading pace. By presenting words sequentially in a fixed location, RSVP removes this inefficiency entirely. Research indicates that with practice, readers can achieve speeds of 500 to 1000 words per minute using this technique. The human brain is remarkably adaptable and can process visual information much faster than we typically read. RSVP taps into this potential by presenting information at an optimal rate for your cognitive abilities. Many speed readers report that RSVP helps them maintain better focus and reduces subvocalization, the habit of silently pronouncing words while reading. This demonstration showcases how RSVP works in practice, giving you a firsthand experience of this revolutionary reading method.`;
+
+        // Simulate deviceready event for browser testing
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add Quick Demo button functionality
+            setTimeout(function() {
+                const quickDemoBtn = document.getElementById('quickDemoBtn');
+                const loadingOverlay = document.getElementById('loadingOverlay');
+
+                if (quickDemoBtn) {
+                    quickDemoBtn.addEventListener('click', function() {
+                        // Show loading overlay
+                        if (loadingOverlay) {
+                            loadingOverlay.classList.add('active');
+                        }
+
+                        // Delay to show the loader animation
+                        setTimeout(() => {
+                            words = DEMO_TEXT.split(/\s+/).filter(word => word.length > 0);
+                            if (words.length > 0) {
+                                currentFileName = 'Quick Demo';
+                                currentWordIndex = 0;
+                                currentPartIndex = 0;
+
+                                hideMainButtons();
+                                hideReloadIcon();
+
+                                updateDisplayWithParts();
+                                updateProgressBar();
+
+                                startBtn.textContent = 'Start';
+                                isRunning = false;
+
+                                // Hide loading overlay
+                                if (loadingOverlay) {
+                                    loadingOverlay.classList.remove('active');
+                                }
+
+                                // Auto-start immediately
+                                if (!isRunning) {
+                                    toggleStartPause();
+                                }
+                            }
+                        }, 1500);
+                    });
+                }
+
+                // Trigger deviceready
+                if (typeof cordova === 'undefined') {
+                    console.log('Running in browser - triggering deviceready manually');
+                    document.dispatchEvent(new Event('deviceready'));
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

@@ -126,10 +126,45 @@ header nav ul li a.active {
     padding: 2rem;
     text-align: center;
     transition: transform 0.3s;
+    position: relative;
 }
 
 .bot-card:hover {
     transform: translateY(-5px);
+}
+
+.bot-card-wrapper {
+    position: relative;
+}
+
+.bot-card.paused {
+    background-color: #d3d3d3;
+    opacity: 0.6;
+}
+
+.bot-card.paused:hover {
+    transform: none;
+}
+
+.bot-card.paused .bot-logo,
+.bot-card.paused h3,
+.bot-card.paused p,
+.bot-card.paused .bot-actions {
+    filter: grayscale(100%) blur(2px);
+    opacity: 0.7;
+}
+
+.paused-label {
+    position: absolute;
+    bottom: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #e0e0e0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
 }
 
 .bot-logo {
