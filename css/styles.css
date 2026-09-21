@@ -64,6 +64,16 @@ header h1 {
     font-weight: 700;
 }
 
+header h1 a {
+    color: var(--light-color);
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+header h1 a:hover {
+    opacity: 0.8;
+}
+
 header nav ul {
     display: flex;
 }
